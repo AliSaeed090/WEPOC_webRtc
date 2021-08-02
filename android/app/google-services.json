@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "34309224117",
+    "project_id": "wepoc-446d9",
+    "storage_bucket": "wepoc-446d9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34309224117:android:432ac46ae287d7ba9430fc",
+        "android_client_info": {
+          "package_name": "com.chat.wepoc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "34309224117-q2j57e50182fraoq2bheje434eob3ued.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chat.wepoc",
+            "certificate_hash": "2ff0d81b1d6ef8619ee9ecebbd68aa9c6158c91c"
+          }
+        },
+        {
+          "client_id": "34309224117-qdcp63n5fesduq6uaod6a6v1l82i254p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chat.wepoc",
+            "certificate_hash": "5414b675f6cad14b828e3c13a4cbeccba89397c2"
+          }
+        },
+        {
+          "client_id": "34309224117-4lji6qtua0te7pm2lbo3qhm1ku14emi4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaFDNOpCYBvrcOnkJ7xP9LGziiXXxHymo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "34309224117-4lji6qtua0te7pm2lbo3qhm1ku14emi4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "34309224117-pig6abmco3vf99k2j8m8ubs7s00h511p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chat.wepoc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

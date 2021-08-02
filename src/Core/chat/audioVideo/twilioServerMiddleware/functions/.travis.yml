@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - 'stable'
+env:
+  global:
+    - TWILIO_ACCOUNT_SID=ACf4f8a04e82312a5dff4b5d5b0951463a
+    - TWILIO_API_KEY=SKe86a3e4f0b8627730d9b8d37eff6f4ef
+    - TWILIO_API_SECRET=FqeCIbPSf7gfM0kGy3ipA0ImEXjy3oeo
