@@ -81,6 +81,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your camera</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Your message to user when the contacts is accessed for the first time</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to access your location to recommend car fans around you.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -93,6 +95,8 @@
 	<string>$(PRODUCT_NAME) would like to save photos to your photo gallery so that you can save photos you receive from your friends.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like access to your photo gallery so that you can send photos to your friends when chatting.</string>
+	<key>Privacy - Contacts Usage Description</key>
+	<string>$(PRODUCT_NAME) would like access to your contacts when chatting.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

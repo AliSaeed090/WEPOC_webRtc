@@ -181,8 +181,10 @@ class IMAudioVideoChat extends React.Component {
   onComponentVisibilityChange(prevProps) {
 
     if (this.props.isMediaChatVisible !== prevProps.isMediaChatVisible) {
+     
       this.setState({
         modalVisible: this.props.isMediaChatVisible,
+        tatus: 'disconnected',  initialCallState: 'Calling',
       });
       this.onModalShow()
       this.modalVisible = this.props.isMediaChatVisible;
