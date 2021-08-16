@@ -4,7 +4,7 @@ import React, {
     useState,
     useLayoutEffect,
 } from 'react';
-import { Text, View, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Linking, Platform, PermissionsAndroid } from 'react-native';
+import { Text, View, FlatList, TouchableOpacity, ActivityIndicator, TextInput, Linking, Platform, PermissionsAndroid,   } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { List, ListItem, Left, Body, Right, Thumbnail, Badge } from 'native-base';
 import AppStyles from '../../../../DynamicAppStyles';
@@ -197,7 +197,7 @@ export default function IMContactScreen(props) {
         });
     }, []);
     const renderHeader = () => {
-        return <TextInput onChangeText={searchFilterFunction} value={qureText} placeholder="Search Here..." clearIcon style={{ backgroundColor: 'tarnsparent', borderWidth: 0.5, borderColor: 'transparent', paddingLeft: 5 }} inputContainerStyle={{ backgroundColor: 'white', opacity: 0.8, borderColor: 'transparent' }} />;
+        return <TextInput onChangeText={searchFilterFunction} value={qureText} placeholder="Search Here..." clearIcon style={{ backgroundColor: 'tarnsparent', borderWidth: 0.5, borderColor: 'transparent', paddingLeft: 5 , height:Platform.OS==="ios"?80:null}} inputContainerStyle={{ backgroundColor: 'white', opacity: 0.8, borderColor: 'transparent' }} />;
     };
     const searchFilterFunction = text => {
 

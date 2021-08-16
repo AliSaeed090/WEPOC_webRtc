@@ -8,7 +8,8 @@ import {
   PermissionsAndroid,
   TouchableOpacity, View,
   StyleSheet,
-  Text
+  Text, 
+  Keyboard
 } from 'react-native';
 import Modal from 'react-native-modal-patch';
 import InCallManager from 'react-native-incall-manager';
@@ -181,6 +182,7 @@ class IMAudioVideoChat extends React.Component {
   onComponentVisibilityChange(prevProps) {
 
     if (this.props.isMediaChatVisible !== prevProps.isMediaChatVisible) {
+      Keyboard.dismiss()
      
       this.setState({
         modalVisible: this.props.isMediaChatVisible,
@@ -841,8 +843,8 @@ class IMAudioVideoChat extends React.Component {
     return (
       <>
         {isCallAccepted === true && this.state.modalVisible === false ?
-          <TouchableOpacity onPress={() => this.setState({ modalVisible: true })} style={{ position: 'absolute', top: 0, width: '100%', height: 40, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: '#FFF' }}>Tap to return to call</Text>
+          <TouchableOpacity onPress={() => this.setState({ modalVisible: true })} style={{ position: 'absolute', top: Platform.OS==="ios"?60:0, width: '100%', height: Platform.OS==="ios"?80: 40, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={{ color: '#FFF' , fontSize:20}}>Tap to return to call</Text>
           </TouchableOpacity> :
 
           null}
