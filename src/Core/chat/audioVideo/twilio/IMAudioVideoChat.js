@@ -843,7 +843,7 @@ class IMAudioVideoChat extends React.Component {
     return (
       <>
         {isCallAccepted === true && this.state.modalVisible === false ?
-          <TouchableOpacity onPress={() => this.setState({ modalVisible: true })} style={{ position: 'absolute', top: Platform.OS==="ios"?60:0, width: '100%', height: Platform.OS==="ios"?80: 40, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => {this.setState({ modalVisible: true });  Keyboard.dismiss()}} style={{ position: 'absolute', top: Platform.OS==="ios"?60:0, width: '100%', height: Platform.OS==="ios"?80: 40, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
             <Text style={{ color: '#FFF' , fontSize:20}}>Tap to return to call</Text>
           </TouchableOpacity> :
 
