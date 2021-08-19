@@ -39,6 +39,12 @@ const VideoChatView = (props) => {
   const [largeFillingRtcContainer, setLargeFillingRtcContainer] = useState(
     styles.largeFillingRtcContainer,
   );
+  useEffect(()=>{
+    settracks([...videoTracks])
+  },[videoTracks])
+  const [tracks, settracks] = useState([]
+    
+  );
   const [
     singleSmallLocalRtcContainer,
     setSingleSmallLocalRtcContainer,
@@ -58,22 +64,33 @@ const VideoChatView = (props) => {
       );
     }
   };
+const switchStreamsRemoteStreams =(i)=>{
+  // alert(i)
 
-  const renderRemoteStreams = ([trackSid, trackIdentifier]) => {
-    {console.log({trackSid,trackIdentifier})}
+  let arr = tracks
+  var obj = arr[i]
+  arr.splice(i,1)
+  arr.unshift(obj)
+  settracks([...arr])
+  // tracks
+
+}
+  const renderRemoteStreams = ([trackSid, trackIdentifier], i) => {
+    { console.log({ trackSid, trackIdentifier, te: "ssssssssssssssssssssssssssss", index: i, flag: isNotGroupStream ? true : false }) }
     return (
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => {
-          
-          if (isLocalLargeContainer) {
-            switchStreams();
-            console.log({isLocalLargeContainer})
-          }
+          switchStreamsRemoteStreams(i);
+          // if (isLocalLargeContainer) {
+            
+          //   console.log({ isLocalLargeContainer })
+          // }
         }}
         key={trackSid}
         style={
-          isNotGroupStream
+
+          i === 0
             ? largeFillingRtcContainer
             : styles.groupSmallLocalRtcContainer
         }>
@@ -97,30 +114,41 @@ const VideoChatView = (props) => {
       style={
         isNotGroupStream
           ? singleSmallLocalRtcContainer
-          : [largeFillingRtcContainer]
+          :
+          [largeFillingRtcContainer]
       }>
       <TwilioVideoLocalView enabled={true} style={styles.rtcStream} />
     </TouchableOpacity>
   );
 
-  const renderStreamTwo = videoTracks && (
+  const renderStreamTwo = tracks && (
+    // console.log({tracks})
     <View
       style={
         isNotGroupStream
           ? {
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-            }
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+          }
           : styles.remoteStreamsContainer
       }>
-        {console.log({videoTracks,isNotGroupStream})}
-      {Array.from(videoTracks, renderRemoteStreams)}
+      {console.log({ tracks, isNotGroupStream })}
+      {
+
+        tracks.map((data, i) => {
+          console.log({ data, i })
+          return renderRemoteStreams(data, i)
+        })
+
+
+
+      }
     </View>
   );
 
   const renderStreams = () => {
-    console.log({isLocalLargeContainer})
+    console.log({ isLocalLargeContainer })
     if (isLocalLargeContainer) {
       return (
         <>
@@ -173,8 +201,8 @@ const VideoChatView = (props) => {
               { backgroundColor: '#fff' },
             ]}
             onPress={gobacktoChat}>
-            <Icon name="message-square" type="feather"  size={controlIconSize / 2} color="black" />
-          </TouchableOpacity>         
+            <Icon name="message-square" type="feather" size={controlIconSize / 2} color="black" />
+          </TouchableOpacity>
         )}
 
         {isCallAccepted && (
@@ -184,8 +212,8 @@ const VideoChatView = (props) => {
               { backgroundColor: '#fff' },
             ]}
             onPress={switchCamera}>
-            <Icon name="refresh-ccw" type="feather"  size={controlIconSize / 2} color="black" />
-          </TouchableOpacity> 
+            <Icon name="refresh-ccw" type="feather" size={controlIconSize / 2} color="black" />
+          </TouchableOpacity>
         )}
 
         <TouchableOpacity

@@ -851,7 +851,10 @@ class IMAudioVideoChat extends React.Component {
 
         <View style={{
           position: 'absolute', top: 0,
-           height: this.state.modalVisible ? '100%' : 0, width: '100%',justifyContent:'center', alignItems:'center'
+           height: this.state.modalVisible ? '100%' : 0, width: '100%',justifyContent:'center', alignItems:'center',
+          //  backgroundColor:'red', 
+           
+          //  flexDirection:'row'
          
           }}>
         {/* <Modal
@@ -864,7 +867,7 @@ class IMAudioVideoChat extends React.Component {
         {isCallAccepted && chatType === 'video' && (
           <VideoChatView
             audioVideoChatReceivers={audioVideoChatReceivers}
-            videoTracks={videoTracks}
+            videoTracks={Array.from(videoTracks)}
             remoteStreams={remoteStreams}
             isCallAccepted={isCallAccepted}
             isComInitiated={isComInitiated}
@@ -912,7 +915,7 @@ class IMAudioVideoChat extends React.Component {
 
       </View>
 
-        {/* </Modal> */ }
+       {/* </Modal>   */}
       </>
     );
   }

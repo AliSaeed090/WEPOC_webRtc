@@ -27,12 +27,15 @@ const styles = StyleSheet.create({
   largeFillingRtcContainer: {
     overflow: 'hidden',
     backgroundColor: 'black',
+    // width: '95%',
+    // height: '50%',
+    // flex:1
     ...StyleSheet.absoluteFill,
   },
   groupSmallLocalRtcContainer: {
     backgroundColor: 'black',
     width: '22%',
-    height: '70%',
+    height: '15%',
     borderRadius: 10,
     marginLeft: 8,
     marginTop: 5,
@@ -53,7 +56,7 @@ const styles = StyleSheet.create({
     top: 15,
     flexDirection: 'row-reverse',
     flexWrap: 'wrap',
-    width: '98%',
+    width: '50%',
     height: '25%',
   },
   rtcStream: {
