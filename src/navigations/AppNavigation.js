@@ -10,8 +10,9 @@ import {
   IMUserSettingsScreen,
   IMContactUsScreen,
 } from '../Core/profile';
-import {  Text, TouchableOpacity, DeviceEventEmitter, } from 'react-native';
-
+import {  Text, TouchableOpacity, DeviceEventEmitter, Platform} from 'react-native';
+import * as firebase from 'firebase'
+import auth from '@react-native-firebase/auth';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../Core/onboarding/LoginScreen/LoginScreen';
 import SignupScreen from '../Core/onboarding/SignupScreen/SignupScreen';
@@ -31,7 +32,13 @@ import authManager from '../Core/onboarding/utils/authManager';
 import GroupDetail from '../screens/GroupChatDetails/DetailScreen'
 import { FriendList } from '../screens/ComingSoon/FriendList'
 import GroupChatRoom from '../screens/Video/VideoCall'
+import { PermissionsAndroid } from 'react-native';
+import Contacts from 'react-native-contacts';
+ 
 
+// const url='http://192.168.1.105:5000/wepoc-446d9/us-central1/syncContacts'
+const url='https://us-central1-wepoc-446d9.cloudfunctions.net/syncContacts'
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   setMediaChatReceivers,
   setIsMediaChatVisible,
@@ -245,6 +252,163 @@ const DrawerStack = () => {
 };
 
 const MainStackNavigator = () => {
+  useEffect(() => {
+    // var uid = firebase.auth().currentUser.uid;
+
+    // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
+    hasAndroidPermission()
+  }, [])
+  const hasAndroidPermission = async () => {
+
+    var uid = firebase.auth().currentUser.uid;
+
+    // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
+    console.log({ uid, authApp:auth().currentUser })
+    // const uid = auth().currentUser.uid
+
+    const permission = PermissionsAndroid.PERMISSIONS.READ_CONTACTS;
+    const hasPermission = await PermissionsAndroid.check(permission);
+    console.log({ flag: hasPermission })
+    if (Platform.OS === 'android') {
+
+
+      if (hasPermission) {
+        Contacts.getAll().then(contacts => {
+          var arr = []
+          console.log({ contacts })
+          contacts.map((data) => {
+            if (data.phoneNumbers.length) {
+              let obj = {
+                displayName: data.displayName,
+                phoneNumber: data.phoneNumbers[0].number.replace(/\s+/g, '').trim()
+              }
+              arr.push(obj)
+              return arr
+
+            }
+
+          })
+          var myHeaders = new Headers();
+          myHeaders.append("Content-Type", "application/json");
+
+          var raw = JSON.stringify({"contacts": arr, "uid": uid });
+
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+          };
+          console.log({ requestOptions})
+          fetch(url, requestOptions)
+
+            .then(response => response.json())
+            .then(async (json) => {
+              console.log({ json })
+              await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
+            })
+            .catch(error => console.log('error', error));
+      
+        })
+
+      } else {
+        const status = await PermissionsAndroid.request(permission);
+        return status === 'granted';
+      }
+    } else {
+      Contacts.checkPermission().then(permission => {
+        console.log({ permission })
+        // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
+        if (permission === 'undefined') {
+          Contacts.requestPermission().then(permission => {
+
+            Contacts.getAll().then(contacts => {
+              var arr = []
+              console.log({ contacts })
+              contacts.map((data) => {
+                console.log({ data })
+                if (data.phoneNumbers.length) {
+                  let obj = {
+                    displayName: data.givenName + data.familyName,
+                    phoneNumber: data.phoneNumbers[0].number.replace(/\s+/g, '').trim()
+                  }
+                  arr.push(obj)
+                  return arr
+
+                }
+
+              })
+              var myHeaders = new Headers();
+              myHeaders.append("Content-Type", "application/json");
+
+              var raw = JSON.stringify({ "contacts": arr, "uid": uid });
+
+              var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+              };
+
+              fetch(url, requestOptions)
+
+                .then(response => response.json())
+                .then(async (json) => {
+                  console.log({ json })
+                  await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
+                })
+                .catch(error => console.log('error', error));
+              console.log({ arr: JSON.stringify(arr) })
+            })
+          })
+        }
+        if (permission === 'authorized') {
+          Contacts.getAll().then(contacts => {
+            var arr = []
+            console.log({ contacts })
+            contacts.map((data) => {
+              console.log({ data })
+              if (data.phoneNumbers.length) {
+                let obj = {
+                  displayName: data.givenName + data.familyName,
+                  phoneNumber: data.phoneNumbers[0].number.replace(/\s+/g, '').trim()
+                }
+                arr.push(obj)
+                return arr
+
+              }
+
+            })
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+
+            var raw = JSON.stringify({ "contacts": arr, "uid": uid });
+            var requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
+            };
+
+            fetch(url, requestOptions)
+
+              .then(response => response.json())
+              .then(async (json) => {
+                console.log({ json })
+                await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
+              })
+              .catch(error => console.log('error', error));
+            console.log({ arr: JSON.stringify(arr) })
+          })
+        }
+        if (permission === 'denied') {
+          alert("Please grant contacts permissions")
+
+        }
+      })
+    }
+
+  }
   return (
     <Stack.Navigator initialRouteName="Home" headerMode="float">
       <Stack.Screen
@@ -302,7 +466,8 @@ const RootNavigator = () => {
 };
 
 const AppNavigator = () => {
- 
+
+
   return (
     <NavigationContainer>
      

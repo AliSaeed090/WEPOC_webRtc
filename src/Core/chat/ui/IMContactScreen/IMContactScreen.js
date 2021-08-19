@@ -44,7 +44,11 @@ export default function IMContactScreen(props) {
 
 
   const hasAndroidPermission = async () => {
-    const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
+    // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
+    var uid = firebase.auth().currentUser.uid;
+
+    // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
+    console.log({ uid, auth:auth().currentUser })
     console.log({ uid, auth:auth().currentUser })
     const permission = PermissionsAndroid.PERMISSIONS.READ_CONTACTS;
     const hasPermission = await PermissionsAndroid.check(permission);

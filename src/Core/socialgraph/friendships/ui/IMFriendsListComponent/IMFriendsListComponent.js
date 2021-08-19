@@ -43,13 +43,13 @@ function IMFriendsListComponent(props) {
 
   return (
     <View style={[styles.container, containerStyle]}>
-      {searchBar && (
+      {/* {searchBar && (
         <SearchBarAlternate
           onPress={onSearchBarPress}
           placeholderTitle={IMLocalized('Search for friends')}
           appStyles={appStyles}
         />
-      )}
+      )} */}
       {friendsData && friendsData.length > 0 && (
         <FlatList
           data={friendsData}

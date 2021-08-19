@@ -42,7 +42,7 @@ const IMFriendItem = memo((props) => {
               ? styles.addFlexContainerFollow
               : styles.addFlexContainer
           }>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => onFriendAction(item, index)}
             style={followEnabled ? [styles.followButton] : [styles.addButton]}>
             <Text
@@ -53,7 +53,7 @@ const IMFriendItem = memo((props) => {
               }>
               {actionTitle}
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       );
     }
