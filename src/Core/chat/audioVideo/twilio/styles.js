@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     height: '15%',
     borderRadius: 10,
     marginLeft: 8,
-    marginTop: 5,
+    marginTop: 15,
     overflow: 'hidden',
   },
   singleSmallLocalRtcContainer: {

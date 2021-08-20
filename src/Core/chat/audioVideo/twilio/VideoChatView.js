@@ -107,8 +107,9 @@ const switchStreamsRemoteStreams =(i)=>{
     <TouchableOpacity
       activeOpacity={0.9}
       onPress={() => {
+        switchStreams();
         if (!isLocalLargeContainer) {
-          switchStreams();
+         
         }
       }}
       style={

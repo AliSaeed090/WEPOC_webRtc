@@ -852,6 +852,7 @@ class IMAudioVideoChat extends React.Component {
         <View style={{
           position: 'absolute', top: 0,
            height: this.state.modalVisible ? '100%' : 0, width: '100%',justifyContent:'center', alignItems:'center',
+           backgroundColor:'black'
           //  backgroundColor:'red', 
            
           //  flexDirection:'row'
