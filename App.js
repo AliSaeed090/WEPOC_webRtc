@@ -13,7 +13,7 @@ import { setI18nConfig } from './src/Core/localization/IMLocalization';
 import { AppNavigator } from './src/navigations/AppNavigation';
 import { AppCallWrapper } from './src/Core/chat/audioVideo';
 import reduxStore from './src/redux/store';
-
+import IncomingCall from 'react-native-incoming-call';
 
 const MainNavigator = AppCallWrapper(AppNavigator);
 import * as firebase from 'firebase'
@@ -25,7 +25,10 @@ const App = (props) => {
 
   const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
 
-  useEffect(() => {
+  useEffect(async() => {
+    const token = await messaging().getToken();
+    console.log({token})
+ 
    
     console.disableYellowBox = true;
     setI18nConfig();

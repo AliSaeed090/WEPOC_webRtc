@@ -8,8 +8,9 @@ import {
   PermissionsAndroid,
   TouchableOpacity, View,
   StyleSheet,
-  Text, 
-  Keyboard
+  Text,
+  Keyboard,
+
 } from 'react-native';
 import Modal from 'react-native-modal-patch';
 import InCallManager from 'react-native-incall-manager';
@@ -74,7 +75,8 @@ const state = {
 class IMAudioVideoChat extends React.Component {
   static contextType = ReactReduxContext;
   static showVideoChatModal = () => {
-    if (!IMAudioVideoChat.modalVisible) {
+    const isForeground = AppState.currentState === 'active';
+    if (!IMAudioVideoChat.modalVisible && isForeground) {
       DeviceEventEmitter.emit('showVideoChatModal');
     }
   };
@@ -132,6 +134,28 @@ class IMAudioVideoChat extends React.Component {
 
   componentDidUpdate(prevProps) {
     console.log("componentDidUpdate");
+
+    DeviceEventEmitter.addListener('appInvoked', async (data) => {
+      console.log('heheheheheheheheheheh')
+
+      await this.mediaChatTracker.unsubscribe();
+      await this.mediaChatTracker.subscribe(false);
+      this.isFromLaunchManager = true;
+      const isForeground = AppState.currentState === 'active';
+      if (this.props.audioVideoChatReceivers?.length > 0 && isForeground) {
+        this.setState(
+          {
+            isComInitiated: true,
+            modalVisible: true,
+            initialCallState: 'Connecting',
+          },
+          () => {
+            this.onAcceptCall();
+          },
+        );
+      }
+
+    });
     this.onComponentVisibilityChange(prevProps);
   }
 
@@ -180,13 +204,14 @@ class IMAudioVideoChat extends React.Component {
   //   return null
   // }
   onComponentVisibilityChange(prevProps) {
-
-    if (this.props.isMediaChatVisible !== prevProps.isMediaChatVisible) {
+    const isForeground = AppState.currentState === 'active';
+    if (this.props.isMediaChatVisible !== prevProps.isMediaChatVisible && isForeground) {
       Keyboard.dismiss()
-     
+
+
       this.setState({
         modalVisible: this.props.isMediaChatVisible,
-        tatus: 'disconnected',  initialCallState: 'Calling',
+        tatus: 'disconnected', initialCallState: 'Calling',
       });
       this.onModalShow()
       this.modalVisible = this.props.isMediaChatVisible;
@@ -218,8 +243,9 @@ class IMAudioVideoChat extends React.Component {
 
     this.getDataFromLaunchManager(async (launchManagerData) => {
       this.launchManagerData = launchManagerData;
+      const isForeground = AppState.currentState === 'active';
 
-      if (launchManagerData) {
+      if (launchManagerData && isForeground) {
         await this.mediaChatTracker.unsubscribe();
         await this.mediaChatTracker.subscribe(false);
         this.isFromLaunchManager = true;
@@ -843,80 +869,92 @@ class IMAudioVideoChat extends React.Component {
     return (
       <>
         {isCallAccepted === true && this.state.modalVisible === false ?
-          <TouchableOpacity onPress={() => {this.setState({ modalVisible: true });  Keyboard.dismiss()}} style={{ position: 'absolute', top: Platform.OS==="ios"?60:0, width: '100%', height: Platform.OS==="ios"?80: 40, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ color: '#FFF' , fontSize:20}}>Tap to return to call</Text>
+          <TouchableOpacity onPress={() => { this.setState({ modalVisible: true }); Keyboard.dismiss() }} style={{
+            // position: 'absolute',
+            // top: Platform.OS === "ios" ? 60 : 0,
+            // alignSelf:'flex-end',
+            width: '100%',
+            height: Platform.OS === "ios" ? 80 : 40,
+            backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            <Text style={{
+              color: '#FFF',
+              fontSize: 20
+            }}>Tap to return to call</Text>
           </TouchableOpacity> :
 
           null}
 
         <View style={{
           position: 'absolute', top: 0,
-           height: this.state.modalVisible ? '100%' : 0, width: '100%',justifyContent:'center', alignItems:'center',
-           backgroundColor:'black'
+          height: this.state.modalVisible ? '100%' : 0, width: '100%', justifyContent: 'center', alignItems: 'center',
+          backgroundColor: 'black'
           //  backgroundColor:'red', 
-           
+
           //  flexDirection:'row'
-         
-          }}>
-        {/* <Modal
+
+        }}>
+          {/* <Modal
           onDismiss={this.endCall}
           onShow={this.onModalShow}
           visible={this.state.modalVisible}
           onRequestClose={this.endCall}
           animationType={'fade'}
           presentationStyle={'pageSheet'}> */}
-        {isCallAccepted && chatType === 'video' && (
-          <VideoChatView
-            audioVideoChatReceivers={audioVideoChatReceivers}
-            videoTracks={Array.from(videoTracks)}
-            remoteStreams={remoteStreams}
-            isCallAccepted={isCallAccepted}
-            isComInitiated={isComInitiated}
-            isMuted={!isAudioEnabled}
-            isSpeaker={isSpeaker}
-            switchCamera={this.onFlipButtonPress}
-            toggleSpeaker={this.toggleSpeaker}
-            toggleMute={this.onMuteButtonPress}
-            endCall={this.endCall}
-            onAcceptCall={this.onAcceptCall}
-            gobacktoChat={this.gobacktoChat}
+          {isCallAccepted && chatType === 'video' && (
+            <VideoChatView
+              audioVideoChatReceivers={audioVideoChatReceivers}
+              videoTracks={Array.from(videoTracks)}
+              remoteStreams={remoteStreams}
+              isCallAccepted={isCallAccepted}
+              isComInitiated={isComInitiated}
+              isMuted={!isAudioEnabled}
+              isSpeaker={isSpeaker}
+              switchCamera={this.onFlipButtonPress}
+              toggleSpeaker={this.toggleSpeaker}
+              toggleMute={this.onMuteButtonPress}
+              endCall={this.endCall}
+              onAcceptCall={this.onAcceptCall}
+              gobacktoChat={this.gobacktoChat}
+            />
+          )}
+          {(!remoteStreams || chatType === 'audio') && (
+            <AudioChatView
+              initialCallState={initialCallState}
+              audioVideoChatReceivers={audioVideoChatReceivers}
+              channelTitle={channelTitle}
+              isCallAccepted={isCallAccepted}
+              hoursCounter={hoursCounter}
+              minutesCounter={minutesCounter}
+              secondsCounter={secondsCounter}
+              isComInitiated={isComInitiated}
+              isSpeaker={isSpeaker}
+              isMuted={!isAudioEnabled}
+              toggleSpeaker={this.toggleSpeaker}
+              endCall={this.endCall}
+              onAcceptCall={this.onAcceptCall}
+              toggleMute={this.onMuteButtonPress}
+              gobacktoChat={this.gobacktoChat}
+            />
+          )}
+
+          <TwilioVideo
+
+
+            ref={this.twilioVideoRef}
+            onRoomDidConnect={this.onRoomDidConnect}
+            onRoomDidDisconnect={this.onRoomDidDisconnect}
+            onRoomDidFailToConnect={this.onRoomDidFailToConnect}
+            onParticipantAddedVideoTrack={this.onParticipantAddedVideoTrack}
+            onParticipantAddedAudioTrack={this.onParticipantAddedAudioTrack}
+            onParticipantRemovedVideoTrack={this.onParticipantRemovedVideoTrack}
           />
-        )}
-        {(!remoteStreams || chatType === 'audio') && (
-          <AudioChatView
-            initialCallState={initialCallState}
-            audioVideoChatReceivers={audioVideoChatReceivers}
-            channelTitle={channelTitle}
-            isCallAccepted={isCallAccepted}
-            hoursCounter={hoursCounter}
-            minutesCounter={minutesCounter}
-            secondsCounter={secondsCounter}
-            isComInitiated={isComInitiated}
-            isSpeaker={isSpeaker}
-            isMuted={!isAudioEnabled}
-            toggleSpeaker={this.toggleSpeaker}
-            endCall={this.endCall}
-            onAcceptCall={this.onAcceptCall}
-            toggleMute={this.onMuteButtonPress}
-            gobacktoChat={this.gobacktoChat}
-          />
-        )}
 
-        <TwilioVideo
-         
+        </View>
 
-          ref={this.twilioVideoRef}
-          onRoomDidConnect={this.onRoomDidConnect}
-          onRoomDidDisconnect={this.onRoomDidDisconnect}
-          onRoomDidFailToConnect={this.onRoomDidFailToConnect}
-          onParticipantAddedVideoTrack={this.onParticipantAddedVideoTrack}
-          onParticipantAddedAudioTrack={this.onParticipantAddedAudioTrack}
-          onParticipantRemovedVideoTrack={this.onParticipantRemovedVideoTrack}
-        />
-
-      </View>
-
-       {/* </Modal>   */}
+        {/* </Modal>   */}
       </>
     );
   }

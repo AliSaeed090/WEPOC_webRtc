@@ -304,13 +304,24 @@ export const loginWithSMSCode = (smsCode, verificationID) => {
         usersRef
           .doc(user.uid)
           .get()
-          .then(function (firestoreDocument) {
+          .then( async function  (firestoreDocument) {
             if (!firestoreDocument.exists) {
               resolve({ errorCode: ErrorCode.noUser });
               return;
             }
             const userData = firestoreDocument.data();
-            resolve({ user: userData });
+            const token = await messaging().getToken();
+            userData['pushToken'] = token
+            userData['pushKitToken'] = token
+
+            usersRef
+              .doc(userData.userID)
+              .update({ userData }).then(() => {
+                resolve({ user: userData });
+              })
+
+
+
           })
           .catch(function (_error) {
             resolve({ error: ErrorCode.serverError });
@@ -363,7 +374,7 @@ export const registerWithPhoneNumber = (
           .doc(uid)
           .set(data)
           .then(() => {
-            
+
             resolve({ user: data });
           });
       })
@@ -406,7 +417,7 @@ export const fetchAndStorePushTokenIfPossible = async (user) => {
       const token = await messaging().getToken();
       updateUser(user.id || user.userID, {
         pushToken: token,
-        pushKitToken: '',
+        pushKitToken: token,
         badgeCount: 0,
       });
     }

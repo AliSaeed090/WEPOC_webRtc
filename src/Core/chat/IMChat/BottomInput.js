@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   Alert,
+  Platform
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
@@ -14,14 +15,14 @@ import dynamicStyles from './styles';
 import { useColorScheme } from 'react-native-appearance';
 import { IMLocalized } from '../../localization/IMLocalization';
 import './BottomAudioRecorder';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
+ 
 const assets = {
   cameraFilled: require('../assets/camera-filled.png'),
   send: require('../assets/send.png'),
   mic: require('../assets/microphone.png'),
   close: require('../assets/close-x-icon.png'),
 };
-
 function BottomInput(props) {
   const {
     value,
@@ -29,6 +30,8 @@ function BottomInput(props) {
     onAudioRecordDone,
     onSend,
     onAddMediaPress,
+    onAddAttachmentPress,
+    channelItem,
     uploadProgress,
     appStyles,
     trackInteractive,
@@ -90,6 +93,10 @@ function BottomInput(props) {
     onAudioRecordDone(params);
   };
 
+
+
+ 
+
   const renderBottomInput = () => {
     return (
       <View style={styles.bottomContentContainer}>
@@ -117,6 +124,12 @@ function BottomInput(props) {
             onPress={onAddMediaPress}
             style={styles.inputIconContainer}>
             <Image style={styles.inputIcon} source={assets.cameraFilled} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onAddAttachmentPress}
+            style={styles.inputIconContainer}>
+              <Ionicons name={'document-attach-outline'} size={20} color={appStyles.colorSet[colorScheme].mainThemeForegroundColor} />
+            {/* <Image style={styles.inputIcon} source={assets.cameraFilled} /> */}
           </TouchableOpacity>
           <View style={styles.inputContainer}>
             <TouchableOpacity

@@ -384,6 +384,8 @@ class IMAudioVideoChat extends React.Component {
   };
 
   onAnswerCallAction = (body) => {
+    console.log('here IndeIMAudioVideoChatx');
+
     this.didAnswer = true;
     if (Platform.OS === 'android') {
       return;
@@ -737,6 +739,7 @@ class IMAudioVideoChat extends React.Component {
   };
 
   onAcceptCall = async () => {
+
     clearTimeout(this.endCallTimeout);
     this.callAccepted = true;
     this.subscribeCallConnectionData();

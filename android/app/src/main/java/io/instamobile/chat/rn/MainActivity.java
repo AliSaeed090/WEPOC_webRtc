@@ -9,6 +9,11 @@ import com.facebook.react.ReactRootView;
 import io.wazo.callkeep.RNCallKeepModule;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
+
+
+import android.os.Bundle;
+import com.codegulp.invokeapp.RNInvokeApp;
+
 public class MainActivity extends ReactActivity {
  
     /**
@@ -29,7 +34,11 @@ public class MainActivity extends ReactActivity {
         }
     };
     }
-
+       @Override
+      protected void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+             RNInvokeApp.sendEvent();
+      }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

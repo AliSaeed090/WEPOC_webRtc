@@ -16,6 +16,9 @@ import {
   setMediaChatReceivers,
   setMediaChatData,
 } from '../audioVideo';
+import DocumentPicker from 'react-native-document-picker'
+import { firebase } from '../../firebase/config';
+import storage from '@react-native-firebase/storage';
 import CryptoJS from "react-native-crypto-js";
 const IMChatScreen = (props) => {
   const appStyles = props.route.params.appStyles;
@@ -513,10 +516,97 @@ const IMChatScreen = (props) => {
       }
     });
   };
-
+  
   const onAddMediaPress = (photoUploadDialogRef) => {
     photoUploadDialogRef.current.show();
   };
+
+  const onAddAttachmentPress = async  () => {
+    alert()
+    try {
+      const res = await DocumentPicker.pick(
+        {
+        type: [
+          DocumentPicker.types.audio,
+      
+          DocumentPicker.types.pdf,
+          DocumentPicker.types.zip,
+          DocumentPicker.types.csv,
+          DocumentPicker.types.doc,
+          DocumentPicker.types.docx,
+          DocumentPicker.types.ppt,
+          DocumentPicker.types.pptx,
+          DocumentPicker.types.xls,
+          DocumentPicker.types.xlsx,
+          ],
+      }
+      
+      )
+
+
+      // const blob = await getPathForFirebaseStorage(res[0].uri);
+      const destPath = `${RNFS.TemporaryDirectoryPath}/${uniqueId()}`
+      await RNFS.copyFile(res[0].uri, destPath)
+      const pathUri = await RNFS.stat(destPath)
+
+      console.log({ destPath: await RNFS.stat(destPath) })
+      // console.log(
+      //   {
+      //     res, blob
+      //   }
+      // )
+
+      const id = uniqueId()
+      var reference = storage().ref(`chatDoc/${channelItem.id}/${id}`);
+      await reference.putFile(pathUri.path);
+      const path = await storage().ref(`chatDoc/${channelItem.id}/${id}`).getDownloadURL();
+      let obj = {
+        path,
+        storageRef: `chatDoc/${channelItem.id}/${id}}`,
+
+      };
+
+      console.log(
+        {
+          obj
+        }
+      )
+
+      // const filename = processedUri.substring(processedUri.lastIndexOf('/') + 1);
+      // const blob = await getBlob(processedUri);
+      // const storageRef = firebase.storage().ref();
+      // const fileRef = storageRef.child(filename);
+      // const uploadTask = fileRef.put(blob);
+
+
+
+
+
+
+
+
+      // console.log(
+      //   {
+      //     type: res[0].type,
+      //     name: res[0].name,
+      //     obj,
+      //     res,
+      //     channelItem
+      //   }
+      // )
+    } catch (err) {
+      console.log({ err })
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+
+        throw err
+      }
+    }
+
+    // Pick multiple files
+
+  }
 
   const onAudioRecordSend = (audioRecord) => {
     startUpload(audioRecord);
@@ -670,7 +760,9 @@ const IMChatScreen = (props) => {
       thread={thread}
       inputValue={inputValue}
       inReplyToItem={inReplyToItem}
+      onAddAttachmentPress={onAddAttachmentPress}
       onAddMediaPress={onAddMediaPress}
+      
       onSendInput={onSendInput}
       onAudioRecordSend={onAudioRecordSend}
       onChangeTextInput={onChangeTextInput}

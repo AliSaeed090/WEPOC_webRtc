@@ -10,6 +10,9 @@ import { firebaseStorage } from '../../firebase/storage';
 import { reportingManager } from '../../user-reporting';
 import { IMLocalized } from '../../localization/IMLocalization';
 import CryptoJS from "react-native-crypto-js";
+import DocumentPicker from 'react-native-document-picker'
+import RNFS from 'react-native-fs';
+import storage from '@react-native-firebase/storage';
 import { notificationManager } from '../../notifications';
 import {
   IMAudioVideoChat,
@@ -536,7 +539,90 @@ const IMChatScreen = (props) => {
   const onAddMediaPress = (photoUploadDialogRef) => {
     photoUploadDialogRef.current.show();
   };
+  const uniqueId = () => {
+    var S4 = function () {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    };
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+  }
+  const onAddAttachmentPress = async () => {
 
+    try {
+      const res = await DocumentPicker.pick(
+        {
+          type: [
+            DocumentPicker.types.audio,
+            DocumentPicker.types.pdf,
+            DocumentPicker.types.zip,
+            DocumentPicker.types.csv,
+            DocumentPicker.types.doc,
+            DocumentPicker.types.docx,
+            DocumentPicker.types.ppt,
+            DocumentPicker.types.pptx,
+            DocumentPicker.types.xls,
+            DocumentPicker.types.xlsx,
+             
+          ],
+        }
+
+      )
+      setUploadProgress(50)
+
+      // const blob = await getPathForFirebaseStorage(res[0].uri);
+      const destPath = `${RNFS.TemporaryDirectoryPath}/${uniqueId()}`
+      await RNFS.copyFile(res[0].uri, destPath)
+      const pathUri = await RNFS.stat(destPath)
+
+      console.log({ destPath: await RNFS.stat(destPath) })
+
+
+      const id = uniqueId()
+      var reference = storage().ref(`chatDoc/${channel.id}/${id}`);
+      await reference.putFile(pathUri.path);
+      const path = await storage().ref(`chatDoc/${channel.id}/${id}`).getDownloadURL();
+
+
+      setDownloadObject({
+        ...res[0],
+        source: path,
+        uri: path,
+        url:path,
+        mime:res[0].type,
+      });
+      setUploadProgress(100)
+      let obj = {
+        res: res[0],
+        path,
+
+        source: path,
+        uri: path,
+        url: path,
+        mime: destPath,
+        destPath
+
+
+      };
+
+      console.log(
+        {
+          obj
+        }
+      )
+
+
+    } catch (err) {
+      console.log({ err })
+      if (DocumentPicker.isCancel(err)) {
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else {
+
+        throw err
+      }
+    }
+
+    // Pick multiple files
+
+  }
   const onAudioRecordSend = (audioRecord) => {
     startUpload(audioRecord);
   };
@@ -721,6 +807,7 @@ const IMChatScreen = (props) => {
         inputValue={inputValue}
         inReplyToItem={inReplyToItem}
         onAddMediaPress={onAddMediaPress}
+        onAddAttachmentPress={onAddAttachmentPress}
         onSendInput={onSendInput}
         onAudioRecordSend={onAudioRecordSend}
         onChangeTextInput={onChangeTextInput}

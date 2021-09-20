@@ -80,7 +80,7 @@ const ChatConfig = {
         navigationPath: 'MyProfileStack',
       },
       {
-        title: 'WEPOC Memo',
+        title: 'WEPOC Celebs',
         icon:
           Platform.OS === 'ios'
             ? DynamicAppStyles.iconSet.memo

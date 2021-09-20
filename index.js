@@ -5,12 +5,12 @@ import App from './App';
 import { name as appName } from './app.json';
 import messaging from '@react-native-firebase/messaging';
 import RNCallKeep from 'react-native-callkeep';
-
+import invokeApp from 'react-native-invoke-app';
 const { LaunchManager } = NativeModules;
 
 const options = {
   ios: {
-    appName: 'WEPOC',
+    appName: 'Instachatty',
   },
   android: {
     alertTitle: 'Permissions required',
@@ -53,7 +53,10 @@ presentIncomingCall = async (remoteMessage) => {
     RNCallKeep.setAvailable(true);
 
     RNCallKeep.addEventListener('answerCall', (body) =>
+ 
+  
       onAnswerCallAction(body, remoteMessage.data),
+     
     );
 
     const { callID, callerName } = remoteMessage.data;
@@ -67,9 +70,11 @@ presentIncomingCall = async (remoteMessage) => {
 onAnswerCallAction = async (body, data) => {
   await RNCallKeep.removeEventListener('endCall');
   console.log('onAnswerCallAction ' + body.callUUID);
+  // RNCallKeep.rejectCall(body.callUUID),
+  invokeApp()
   RNCallKeep.rejectCall(body.callUUID);
-
-  LaunchManager.openAppWithData('isFromLaunchManager');
+ 
+  // LaunchManager.openAppWithData('isFromLaunchManager');
   // LaunchManager.openAppWithData(JSON.stringify(data));
 };
 

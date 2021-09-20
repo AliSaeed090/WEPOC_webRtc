@@ -24,6 +24,8 @@ function IMChat(props) {
     onLaunchCamera,
     onOpenPhotos,
     onAddMediaPress,
+    
+    onAddAttachmentPress,
     uploadProgress,
     mediaItemURLs,
     isMediaViewerOpen,
@@ -45,7 +47,7 @@ function IMChat(props) {
     onDeleteThreadItem,
     channelItem,
   } = props;
-
+console.log({onAddAttachmentPress})
   const colorScheme = useColorScheme();
   const styles = dynamicStyles(appStyles, colorScheme);
 
@@ -259,6 +261,8 @@ function IMChat(props) {
         />
       </KeyboardAwareView>
       <BottomInput
+         channelItem={channelItem}
+        thread={thread}
         uploadProgress={uploadProgress}
         value={inputValue}
         onAudioRecordDone={onAudioRecordDone}
@@ -266,7 +270,9 @@ function IMChat(props) {
         onSend={onSend}
         appStyles={appStyles}
         trackInteractive={true}
+      
         onAddMediaPress={() => onAddMediaPress(photoUploadDialogRef)}
+        onAddAttachmentPress={onAddAttachmentPress}
         inReplyToItem={inReplyToItem}
         onReplyingToDismiss={onReplyingToDismiss}
       />
@@ -358,6 +364,7 @@ IMChat.propTypes = {
   onLaunchCamera: PropTypes.func,
   onOpenPhotos: PropTypes.func,
   onAddMediaPress: PropTypes.func,
+  onAddAttachmentPress:PropTypes.func,
   user: PropTypes.object,
   uploadProgress: PropTypes.number,
   isMediaViewerOpen: PropTypes.bool,

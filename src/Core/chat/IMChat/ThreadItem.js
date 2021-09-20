@@ -7,6 +7,8 @@ import {
   Platform,
   NativeModules,
   TouchableWithoutFeedback,
+  Linking,
+  Modal
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import ThreadMediaItem from './ThreadMediaItem';
@@ -15,7 +17,7 @@ import dynamicStyles from './styles';
 import { useColorScheme } from 'react-native-appearance';
 import { loadCachedItem } from '../../helpers/cacheManager';
 import { IMLocalized } from '../../localization/IMLocalization';
-
+  
 const { VideoPlayerManager } = NativeModules;
 
 const assets = {
@@ -49,7 +51,26 @@ function ThreadItem(props) {
   const updateItemImagePath = (path) => {
     imagePath.current = path;
   };
+  // DocumentPicker.types.pdf,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  // DocumentPicker.types.,
+  const ispdf = item.url && item.url.mime && item.url.mime.endsWith('pdf');
+  const isDoc = item.url && item.url.mime && item.url.mime.endsWith('doc');
+  const iszip = item.url && item.url.mime && item.url.mime.endsWith('zip');
 
+  const iscsv = item.url && item.url.mime && item.url.mime.endsWith('csv');
+  const isdocx = item.url && item.url.mime && item.url.mime.endsWith('docx');
+  const isppt = item.url && item.url.mime && item.url.mime.endsWith('ppt');
+ 
+  const ispptx = item.url && item.url.mime && item.url.mime.endsWith('pptx');
+  const isxls = item.url && item.url.mime && item.url.mime.endsWith('xls');
+  const isxlsx = item.url && item.url.mime && item.url.mime.endsWith('xlsx');
   const isAudio =
     item.url && item.url.mime && item.url.mime.startsWith('audio');
   const isVideo =
@@ -93,6 +114,14 @@ function ThreadItem(props) {
     if (isAudio) {
       return;
     }
+    if (isDoc || ispdf || iszip || isxls || isxlsx || isdocx  || ispptx || isppt || iscsv) {
+      Linking.openURL(item.url.url)
+
+     
+      return;
+    }
+
+
 
     const newLegacyItemURl = imagePath.current;
     const newItemURl = { ...item.url, url: imagePath.current };
@@ -176,12 +205,12 @@ function ThreadItem(props) {
             <Text style={styles.inReplyToHeaderText}>
               {isMine
                 ? IMLocalized('You replied to ') +
-                  (inReplyToItem.senderFirstName ||
-                    inReplyToItem.senderLastName)
+                (inReplyToItem.senderFirstName ||
+                  inReplyToItem.senderLastName)
                 : (item.senderFirstName || item.senderLastName) +
-                  IMLocalized(' replied to ') +
-                  (inReplyToItem.senderFirstName ||
-                    inReplyToItem.senderLastName)}
+                IMLocalized(' replied to ') +
+                (inReplyToItem.senderFirstName ||
+                  inReplyToItem.senderLastName)}
             </Text>
           </View>
           <View style={styles.inReplyToItemBubbleView}>
@@ -195,7 +224,7 @@ function ThreadItem(props) {
     return null;
   };
 
-  const handleOnPress = () => {};
+  const handleOnPress = () => { };
 
   const handleOnLongPress = () => {
     if (!isAudio && !isVideo && !item.url) {
@@ -203,7 +232,7 @@ function ThreadItem(props) {
     }
   };
 
-  const handleOnPressOut = () => {};
+  const handleOnPressOut = () => { };
 
   return (
     <TouchableWithoutFeedback
@@ -225,6 +254,7 @@ function ThreadItem(props) {
                     { padding: 0, marginRight: isAudio ? 8 : -1 },
                   ]}>
                   <ThreadMediaItem
+                    name={item.url.name}
                     outBound={outBound}
                     updateItemImagePath={updateItemImagePath}
                     videoRef={videoRef}

@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import { Video } from 'expo-av';
 import CircleSnail from 'react-native-progress/CircleSnail';
 import AudioMediaThreadItem from './AudioMediaThreadItem';
 import { loadCachedItem } from '../../helpers/cacheManager';
 import { createImageProgress } from 'react-native-image-progress';
 import FastImage from 'react-native-fast-image';
+ 
+ 
+ 
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const Image = createImageProgress(FastImage);
 
@@ -18,12 +22,14 @@ export default function ThreadMediaItem({
   item,
   outBound,
   updateItemImagePath,
+  name
 }) {
   const isValidUrl = item.url.url && item.url.url.startsWith('http');
   const isValidLegacyUrl = !item.url.url && item.url.startsWith('http');
   const uri = isValidUrl || isValidLegacyUrl ? item.url.url || item.url : '';
 
   const [videoPaused, setVideoPaused] = useState(false);
+  const [showDownload, setshowDownload] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
   const [cachedImage, setCachedImage] = useState(uri);
   const [cachedVideo, setCachedVideo] = useState(null);
@@ -68,6 +74,9 @@ export default function ThreadMediaItem({
     setVideoLoading(true);
   };
 
+
+
+  
   const onVideoLoad = (payload) => {
     setVideoLoading(false);
   };
@@ -116,9 +125,19 @@ export default function ThreadMediaItem({
       </View>
     );
   } else {
+
+
+
     // To handle old format of an array of url stings. Before video feature
     return (
-      <Image source={{ uri: cachedImage }} style={dynamicStyles.mediaMessage} />
+
+      <View style={{ width: 100, height: 100,  justifyContent:'center',alignItems:'center', backgroundColor:'white' }} onPress={() => setshowDownload(true)}   >
+         <FontAwesome5 name='file-export' size={50} color='black' />
+        <Text style={{fontSize:20, }}>{name}</Text>
+      </View >
+
+
+      // <Image source={{ uri: cachedImage }} style={dynamicStyles.mediaMessage} />
     );
   }
 }

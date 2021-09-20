@@ -8,6 +8,7 @@ export const sendCallInitiationRemoteNotification = (
   channelID,
   channelName,
 ) => {
+  console.log("Push Notificationssssssssssssssssssssssssssssssssssssssssss")
   // We send a push kit notification (in case the recipients are on iOS)
   const data = {
     callerID: caller.id,
@@ -25,12 +26,27 @@ export const sendCallInitiationRemoteNotification = (
       'Content-Type': 'application/json',
     }),
     body: JSON.stringify(data),
-  });
+  }).then(function(response) {
+    response.text().then(function(text) {
+     console.log({response, text})
+    });
+  }).catch((err)=>{
+    console.log({notificationErr:err})
+  })
 
   console.log('ttttt push kit ' + JSON.stringify(data));
 
+
   // We send a push notification (in case the recipients are on Android)
   recipients.forEach((recipient) => {
+    
+  console.log({
+    caller,
+    recipient,
+    channelID,
+    callType,
+    callID,
+  });
     notificationManager.sendCallNotification(
       caller,
       recipient,

@@ -100,7 +100,7 @@ const sendCallNotification = async (
       contentAvailable: true,
     },
   };
-
+console.log({pushNotification})
   try {
     const response = await fetch(fcmURL, {
       method: 'post',
