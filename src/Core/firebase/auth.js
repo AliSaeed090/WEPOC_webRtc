@@ -417,7 +417,7 @@ export const fetchAndStorePushTokenIfPossible = async (user) => {
       const token = await messaging().getToken();
       updateUser(user.id || user.userID, {
         pushToken: token,
-        pushKitToken: token,
+        pushKitToken: "",
         badgeCount: 0,
       });
     }

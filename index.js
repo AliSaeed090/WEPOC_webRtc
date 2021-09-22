@@ -10,7 +10,7 @@ const { LaunchManager } = NativeModules;
 
 const options = {
   ios: {
-    appName: 'Instachatty',
+    appName: 'Wepoc',
   },
   android: {
     alertTitle: 'Permissions required',
@@ -20,7 +20,9 @@ const options = {
   },
 };
 
-RNCallKeep.setup(options);
+RNCallKeep.setup(options).then((accepted)=>{
+  console.log({accepted})
+});
 
 messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   console.log('xxxxxxx ' + JSON.stringify(remoteMessage));

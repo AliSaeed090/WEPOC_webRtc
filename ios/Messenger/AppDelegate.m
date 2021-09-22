@@ -119,7 +119,7 @@ NSString * const kEXCurrentAPNSTokenDefaultsKey = @"EXCurrentAPNSTokenDefaultsKe
   [RNVoipPushNotificationManager didReceiveIncomingPushWithPayload:payload forType:(NSString *)type];
 
   // --- You should make sure to report to callkit BEFORE execute `completion()`
-  // [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:[chatType isEqualToString:@"video"] localizedCallerName:callerName fromPushKit: YES payload:nil];
+  [RNCallKeep reportNewIncomingCall:uuid handle:handle handleType:@"generic" hasVideo:[chatType isEqualToString:@"video"] localizedCallerName:callerName fromPushKit: YES payload:nil];
 
   // --- You don't need to call it if you stored `completion()` and will call it on the js side.
   completion();

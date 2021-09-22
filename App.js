@@ -18,6 +18,8 @@ import IncomingCall from 'react-native-incoming-call';
 const MainNavigator = AppCallWrapper(AppNavigator);
 import * as firebase from 'firebase'
 const useForceUpdate = () => useState()[1];
+import messaging from '@react-native-firebase/messaging';
+import VoipPushNotification from 'react-native-voip-push-notification';
 
 
 
@@ -29,7 +31,15 @@ const App = (props) => {
     const token = await messaging().getToken();
     console.log({token})
  
-   
+    if (Platform.OS === 'ios') {
+      VoipPushNotification.requestPermissions();
+      VoipPushNotification.registerVoipToken();
+
+      VoipPushNotification.addEventListener('register', (token) => {
+        console.log('push kit token from ios', token);
+         console.log({ pushKitToken: token });
+      });
+    }
     console.disableYellowBox = true;
     setI18nConfig();
     // RNLocalize.addEventListener("change", handleLocalizationChange);
