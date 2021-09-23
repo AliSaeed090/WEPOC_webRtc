@@ -44,7 +44,7 @@ const ComingSoonScreen = (props) => {
     //   menuItems={menuItems}
     //   appStyles={AppStyles}
     // />
-    <View style={{backgroundColor:"#3e3f5e"}}>
+    <View style={{backgroundColor:"black"}}>
       <Image
             source={
               require('../../../assets/wepoc/comingsoon.png')

@@ -21,7 +21,7 @@ const IMFriendsScreen = (props) => {
   let colorScheme = useColorScheme();
   let currentTheme = appStyles.navThemeConstants[colorScheme];
   const followEnabled = props.route.params.followEnabled;
-
+  const channels = useSelector((state) => state.chat.channels);
   const [isLoading, setIsLoading] = useState(false);
   const [willBlur, setWillBlur] = useState(false);
 
@@ -153,14 +153,70 @@ const IMFriendsScreen = (props) => {
     );
   };
 
-  const onFriendItemPress = (friendship) => {
-    if (friendship.user && friendship.user.id == currentUser.id) {
-      return;
+
+  const sendMessage = (user) => {
+    var friend = user.item.user
+    console.log({ user: user.item.user })
+    const id1 = currentUser.id || currentUser.userID;
+    const id2 =
+      friend.id || friend.userID || friend.user.id || friend.user.userID;
+    let channel = {
+      id: id1 < id2 ? id1 + id2 : id2 + id1,
+      participants: friend.user ? [friend.user] : [friend],
+    };
+
+    const otherChannelInfo = channels?.find(
+      (currentChannel) => currentChannel.id === channel.id,
+    );
+
+    if (otherChannelInfo) {
+      channel = {
+        ...channel,
+        ...otherChannelInfo,
+      };
     }
-    props.navigation.push('FriendsProfile', {
-      user: friendship.user,
-      lastScreenTitle: 'Friends',
+
+
+    props.navigation.navigate('PersonalChat', {
+      channel,
+      appStyles: appStyles,
     });
+  }
+  const onFriendItemPress = (friendship) => {
+    console.log({friendship})
+    var friend = friendship.user
+  
+    const id1 = currentUser.id || currentUser.userID;
+    const id2 =
+      friend.id || friend.userID || friend.user.id || friend.user.userID;
+    let channel = {
+      id: id1 < id2 ? id1 + id2 : id2 + id1,
+      participants: friend.user ? [friend.user] : [friend],
+    };
+
+    const otherChannelInfo = channels?.find(
+      (currentChannel) => currentChannel.id === channel.id,
+    );
+
+    if (otherChannelInfo) {
+      channel = {
+        ...channel,
+        ...otherChannelInfo,
+      };
+    }
+
+
+    props.navigation.navigate('PersonalChat', {
+      channel,
+      appStyles: appStyles,
+    });
+    // if (friendship.user && friendship.user.id == currentUser.id) {
+    //   return;
+    // }
+    // props.navigation.navigate('FriendsProfile', {
+    //   user: friendship.user,
+    //   lastScreenTitle: 'Friends',
+    // });
   };
 
   const onEmptyStatePress = () => {

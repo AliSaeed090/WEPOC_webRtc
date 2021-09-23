@@ -37,9 +37,11 @@ const darkColorSet = {
 };
 
 const colorSet = {
-  light: lightColorSet,
+  // light: lightColorSet,
+
+  light: darkColorSet,
   dark: darkColorSet,
-  'no-preference': lightColorSet,
+  'no-preference': darkColorSet,
 };
 
 const navLight = {
@@ -57,9 +59,9 @@ const navDark = {
 };
 
 const navThemeConstants = {
-  light: navLight,
+  light: navDark,
   dark: navDark,
-  'no-preference': navLight,
+  'no-preference': navDark,
 };
 
 const fontFamily = {

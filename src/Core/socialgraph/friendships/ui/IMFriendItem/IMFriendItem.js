@@ -36,7 +36,8 @@ const IMFriendItem = memo((props) => {
   const renderActions = (displayActions, actionTitle) => {
     if (displayActions && actionTitle) {
       return (
-        <View
+        <TouchableOpacity
+        onPress={alert}
           style={
             followEnabled
               ? styles.addFlexContainerFollow
@@ -54,7 +55,7 @@ const IMFriendItem = memo((props) => {
               {actionTitle}
             </Text>
           </TouchableOpacity> */}
-        </View>
+        </TouchableOpacity>
       );
     }
     return null;
@@ -63,6 +64,7 @@ const IMFriendItem = memo((props) => {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
+      // onPress={alert}
       onPress={() => onFriendItemPress && onFriendItemPress(item)}
       style={styles.friendItemContainer}>
       <View style={styles.chatIconContainer}>
