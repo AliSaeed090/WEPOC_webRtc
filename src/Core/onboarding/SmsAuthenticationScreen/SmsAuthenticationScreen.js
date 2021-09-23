@@ -318,7 +318,7 @@ const SmsAuthenticationScreen = (props) => {
           allowZeroAfterCountryCode={false}
           textProps={{
             placeholder: IMLocalized('Phone number'),
-            placeholderTextColor: '#aaaaaa',
+            placeholderTextColor: '#fff',
           }}
         />
         {countriesPickerData && (
