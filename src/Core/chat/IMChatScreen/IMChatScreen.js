@@ -180,14 +180,14 @@ const IMChatScreen = (props) => {
             width={20}
             height={20}
           />
-          <IMIconButton
+          {/* <IMIconButton
             source={require('../assets/call.png')}
             tintColor={appStyles.styleSet.backArrowStyle.tintColor}
             onPress={onAudioChat}
             marginRight={15}
             width={20}
             height={20}
-          />
+          /> */}
           <IMIconButton
             source={require('../assets/video-camera-filled.png')}
             tintColor={appStyles.styleSet.backArrowStyle.tintColor}

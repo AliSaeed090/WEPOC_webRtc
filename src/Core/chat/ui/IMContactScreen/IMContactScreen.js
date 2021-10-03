@@ -33,7 +33,7 @@ export default function IMContactScreen(props) {
       hasAndroidPermission()
     }
     else {
-      console.log({ value: JSON.parse(value) })
+      // console.log({ value: JSON.parse(value) })
       value = JSON.parse(value)
       setContacts(value.arr)
       setLoading(false)
@@ -48,18 +48,18 @@ export default function IMContactScreen(props) {
     var uid = firebase.auth().currentUser.uid;
 
     // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
-    console.log({ uid, auth:auth().currentUser })
-    console.log({ uid, auth:auth().currentUser })
+    // console.log({ uid, auth:auth().currentUser })
+    // console.log({ uid, auth:auth().currentUser })
     const permission = PermissionsAndroid.PERMISSIONS.READ_CONTACTS;
     const hasPermission = await PermissionsAndroid.check(permission);
-    console.log({ flag: hasPermission })
+    // console.log({ flag: hasPermission })
     if (Platform.OS === 'android') {
 
 
       if (hasPermission) {
         Contacts.getAll().then(contacts => {
           var arr = []
-          console.log({ contacts })
+          // console.log({ contacts })
           contacts.map((data) => {
             if (data.phoneNumbers.length) {
               let obj = {
@@ -88,11 +88,11 @@ export default function IMContactScreen(props) {
 
             .then(response => response.json())
             .then(async (json) => {
-              console.log({ json })
+              // console.log({ json })
               await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
             })
             .catch(error => console.log('error', error));
-          console.log({ arr: JSON.stringify(arr) })
+          // console.log({ arr: JSON.stringify(arr) })
         })
 
       } else {
@@ -101,14 +101,14 @@ export default function IMContactScreen(props) {
       }
     } else {
       Contacts.checkPermission().then(permission => {
-        console.log({ permission })
+        // console.log({ permission })
         // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
         if (permission === 'undefined') {
           Contacts.requestPermission().then(permission => {
 
             Contacts.getAll().then(contacts => {
               var arr = []
-              console.log({ contacts })
+              // console.log({ contacts })
               contacts.map((data) => {
                 if (data.phoneNumbers.length) {
                   let obj = {
@@ -137,18 +137,18 @@ export default function IMContactScreen(props) {
 
                 .then(response => response.json())
                 .then(async (json) => {
-                  console.log({ json })
+                  // console.log({ json })
                   await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
                 })
                 .catch(error => console.log('error', error));
-              console.log({ arr: JSON.stringify(arr) })
+              // console.log({ arr: JSON.stringify(arr) })
             })
           })
         }
         if (permission === 'authorized') {
           Contacts.getAll().then(contacts => {
             var arr = []
-            console.log({ contacts })
+            // console.log({ contacts })
             contacts.map((data) => {
               if (data.phoneNumbers.length) {
                 let obj = {
@@ -177,11 +177,11 @@ export default function IMContactScreen(props) {
 
               .then(response => response.json())
               .then(async (json) => {
-                console.log({ json })
+                // console.log({ json })
                 await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
               })
               .catch(error => console.log('error', error));
-            console.log({ arr: JSON.stringify(arr) })
+            // console.log({ arr: JSON.stringify(arr) })
           })
         }
         if (permission === 'denied') {

@@ -29,7 +29,7 @@ const App = (props) => {
 
   useEffect(async() => {
     const token = await messaging().getToken();
-    console.log({token})
+    // console.log({token})
  
     if (Platform.OS === 'ios') {
       VoipPushNotification.requestPermissions();

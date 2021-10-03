@@ -86,7 +86,7 @@ const HomeScreen = (props) => {
   };
 
   const onFriendItemPress = (friend) => {
-    console.log({friend})
+    // console.log({friend})
     const id1 = currentUser.id || currentUser.userID;
     const id2 =
       friend.id || friend.userID || friend.user.id || friend.user.userID;
@@ -124,7 +124,7 @@ const HomeScreen = (props) => {
   };
 
   const onSenderProfilePicturePress = (item) => {
-    console.log(item);
+    // console.log(item);
   };
 
   return (

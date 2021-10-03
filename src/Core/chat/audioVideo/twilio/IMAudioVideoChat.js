@@ -920,7 +920,8 @@ class IMAudioVideoChat extends React.Component {
               gobacktoChat={this.gobacktoChat}
             />
           )}
-          {(!remoteStreams || chatType === 'audio') && (
+          {(!remoteStreams || chatType === 'audio') && ( 
+           
             <AudioChatView
               initialCallState={initialCallState}
               audioVideoChatReceivers={audioVideoChatReceivers}

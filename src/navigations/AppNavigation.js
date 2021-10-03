@@ -263,19 +263,19 @@ const MainStackNavigator = () => {
     var uid = firebase.auth().currentUser.uid;
 
     // const uid = "903W0ZCzhsWl4ranKJ4D9xZ1Uxt2"
-    console.log({ uid, authApp:auth().currentUser })
+    // console.log({ uid, authApp:auth().currentUser })
     // const uid = auth().currentUser.uid
 
     const permission = PermissionsAndroid.PERMISSIONS.READ_CONTACTS;
     const hasPermission = await PermissionsAndroid.check(permission);
-    console.log({ flag: hasPermission })
+    // console.log({ flag: hasPermission })
     if (Platform.OS === 'android') {
 
 
       if (hasPermission) {
         Contacts.getAll().then(contacts => {
           var arr = []
-          console.log({ contacts })
+          // console.log({ contacts })
           contacts.map((data) => {
             if (data.phoneNumbers.length) {
               let obj = {
@@ -299,12 +299,12 @@ const MainStackNavigator = () => {
             body: raw,
             redirect: 'follow'
           };
-          console.log({ requestOptions})
+          // console.log({ requestOptions})
           fetch(url, requestOptions)
 
             .then(response => response.json())
             .then(async (json) => {
-              console.log({ json })
+              // console.log({ json })
               await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
             })
             .catch(error => console.log('error', error));
@@ -317,16 +317,16 @@ const MainStackNavigator = () => {
       }
     } else {
       Contacts.checkPermission().then(permission => {
-        console.log({ permission })
+        // console.log({ permission })
         // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
         if (permission === 'undefined') {
           Contacts.requestPermission().then(permission => {
 
             Contacts.getAll().then(contacts => {
               var arr = []
-              console.log({ contacts })
+              // console.log({ contacts })
               contacts.map((data) => {
-                console.log({ data })
+                // console.log({ data })
                 if (data.phoneNumbers.length) {
                   let obj = {
                     displayName: data.givenName + data.familyName,
@@ -354,20 +354,20 @@ const MainStackNavigator = () => {
 
                 .then(response => response.json())
                 .then(async (json) => {
-                  console.log({ json })
+                  // console.log({ json })
                   await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
                 })
                 .catch(error => console.log('error', error));
-              console.log({ arr: JSON.stringify(arr) })
+              // console.log({ arr: JSON.stringify(arr) })
             })
           })
         }
         if (permission === 'authorized') {
           Contacts.getAll().then(contacts => {
             var arr = []
-            console.log({ contacts })
+            // console.log({ contacts })
             contacts.map((data) => {
-              console.log({ data })
+              // console.log({ data })
               if (data.phoneNumbers.length) {
                 let obj = {
                   displayName: data.givenName + data.familyName,
@@ -394,11 +394,11 @@ const MainStackNavigator = () => {
 
               .then(response => response.json())
               .then(async (json) => {
-                console.log({ json })
+                // console.log({ json })
                 await AsyncStorage.setItem("syncContacts", JSON.stringify(json));
               })
               .catch(error => console.log('error', error));
-            console.log({ arr: JSON.stringify(arr) })
+            // console.log({ arr: JSON.stringify(arr) })
           })
         }
         if (permission === 'denied') {
