@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { FlatList, TouchableOpacity, Text, View, Image } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 
@@ -8,21 +8,28 @@ import dynamicStyles from './styles';
 import { useColorScheme } from 'react-native-appearance';
 import { TNEmptyStateView } from '../../../truly-native';
 import { IMLocalized } from '../../../localization/IMLocalization';
-
+import { ReactReduxContext, useSelector } from 'react-redux';
+var   friends =[]
 function IMCreateGroupComponent(props) {
   const {
     onCancel,
     isNameDialogVisible,
-    friends,
+  
     onSubmitName,
     onCheck,
     appStyles,
     onEmptyStatePress,
   } = props;
-
+  const friendships = useSelector((state) => state.friends.friendships);
+  console.log({friendships, friends})
   const colorScheme = useColorScheme();
   const styles = dynamicStyles(appStyles, colorScheme);
+  useEffect(()=>{
+     friends=friendships.map((data)=>{
+      return data.user
+    })
 
+  },[friendships])
   // const [friends, setFriends] = useState([...DATA]);
   // const [nameDialogVisible, setNameDialogVisible] = useState(false);
   // const [input] = useState('');

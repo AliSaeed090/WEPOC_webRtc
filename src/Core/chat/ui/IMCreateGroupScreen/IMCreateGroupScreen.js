@@ -15,6 +15,7 @@ import { channelManager } from '../../firebase';
 import * as firebase from 'firebase'
 import { IMLocalized } from '../../../localization/IMLocalization';
 import { useColorScheme } from 'react-native-appearance';
+var   friends =[]
 const db = firebase.firestore();
 
 const IMCreateGroupScreen = (props) => {
@@ -22,19 +23,24 @@ const IMCreateGroupScreen = (props) => {
   const colorScheme = useColorScheme();
   const currentTheme = appStyles?.navThemeConstants[colorScheme];
 
-  const friends = useSelector((state) => state.friends.friends);
+  // const friends = useSelector((state) => state.friends.friends);
   const currentUser = useSelector((state) => state.auth.user);
-
+  const friendships = useSelector((state) => state.friends.friendships);
   const [isNameDialogVisible, setIsNameDialogVisible] = useState(false);
   const [groupName, setGroupName] = useState('');
   const [uiFriends, setUiFriends] = useState(null);
+  useEffect(()=>{
+    friends=friendships.map((data)=>{
+     return data.user
+   })
 
+ },[friendships])
   useLayoutEffect(() => {
     console.log("props==>", props.route.params.title)
     props.navigation.setOptions({
       headerTitle: IMLocalized('Choose People'),
       headerRight:
-        friends.length > 1
+      friends.length > 1
           ? () => (
             <TextButton style={{ marginHorizontal: 7 }} onPress={props.route.params.title == "Create" ? onCreate : onADD}>
               {IMLocalized(props?.route.params.title)}

@@ -249,7 +249,9 @@ console.log({onAddAttachmentPress})
     <SafeAreaView style={styles.personalChatContainer}>
       <KeyboardAwareView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-        style={styles.nonkeyboardContainer}>
+        // style={styles.nonkeyboardContainer}
+        >
+
         <MessageThread
           thread={thread}
           user={user}

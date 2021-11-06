@@ -123,7 +123,7 @@ const dynamicStyles = (appStyles, colorScheme, outBound) => {
     },
     // Message Thread
     nonkeyboardContainer: {
-      flex: 1,
+      // flex: 1,
     },
     messageContentThreadContainer: {
       margin: 6,
